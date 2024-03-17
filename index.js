@@ -1,6 +1,6 @@
 const strftime = require("strftime");
 
-function getSalahTimeCustom(
+function getSalahTimesCustom(
   fajrInput,
   sunriseInput,
   dhuhrInput,
@@ -17,11 +17,12 @@ function getSalahTimeCustom(
     !maghribInput ||
     !ishaInput
   ) {
-    throw new Error("Missing information.");
+    return {
+      Error: "Missing required inputs.",
+    };
   }
 
   var lastUpdated;
-  var resultantOutput;
 
   if (!lastUpdated) {
     lastUpdated = "Unknown";
@@ -137,100 +138,100 @@ function getSalahTimeCustom(
     if (hour == fajrHour) {
       if (minute >= fajrMinute) {
         const timeLeft = timeDifference(timeNow, sunrise);
-        resultant(fajrText, morningText, timeLeft, lastUpdated);
+        return resultant(fajrText, morningText, timeLeft, lastUpdated);
       } else {
         const timeLeft = timeDifference(timeNow, fajr);
-        resultant(midnightText, fajrText, timeLeft, lastUpdated);
+        return resultant(midnightText, fajrText, timeLeft, lastUpdated);
       }
     } else {
       const timeLeft = timeDifference(timeNow, fajr);
-      resultant(midnightText, fajrText, timeLeft, lastUpdated);
+      return resultant(midnightText, fajrText, timeLeft, lastUpdated);
     }
     // Sunrise timings start here
   } else if (hour < sunrise0) {
     if (minute >= sunriseMinute) {
       const timeLeft = timeDifference(timeNow, dhuhr);
-      resultant(morningText, dhuhrText, timeLeft, lastUpdated);
+      return resultant(morningText, dhuhrText, timeLeft, lastUpdated);
     } else {
       const timeLeft = timeDifference(timeNow, sunrise);
-      resultant(fajrText, sunriseText, timeLeft, lastUpdated);
+      return resultant(fajrText, sunriseText, timeLeft, lastUpdated);
     }
     // Dhuhr timings start here
   } else if (hour < dhuhrZero) {
     if (hour == dhuhrHour) {
       if (minute >= dhuhrMinute) {
         const timeLeft = timeDifference(timeNow, asr);
-        resultant(dhuhrText, asrText, timeLeft, lastUpdated);
+        return resultant(dhuhrText, asrText, timeLeft, lastUpdated);
       } else {
         const timeLeft = timeDifference(timeNow, dhuhr);
-        resultant(morningText, dhuhrText, timeLeft, lastUpdated);
+        return resultant(morningText, dhuhrText, timeLeft, lastUpdated);
       }
     } else {
       const timeLeft = timeDifference(timeNow, dhuhr);
-      resultant(morningText, dhuhrText, timeLeft, lastUpdated);
+      return resultant(morningText, dhuhrText, timeLeft, lastUpdated);
     }
     // Asr timings start here
   } else if (hour < asrZero) {
     if (hour == asrHour) {
       if (minute >= asrMinute) {
         const timeLeft = timeDifference(timeNow, maghrib);
-        resultant(asrText, maghribText, timeLeft, lastUpdated);
+        return resultant(asrText, maghribText, timeLeft, lastUpdated);
       } else {
         const timeLeft = timeDifference(timeNow, asr);
-        resultant(dhuhrText, asrText, timeLeft, lastUpdated);
+        return resultant(dhuhrText, asrText, timeLeft, lastUpdated);
       }
     } else {
       const timeLeft = timeDifference(timeNow, asr);
-      resultant(dhuhrText, asrText, timeLeft, lastUpdated);
+      return resultant(dhuhrText, asrText, timeLeft, lastUpdated);
     }
     // Maghrib timings start here
   } else if (hour < maghribZero) {
     if (hour == maghribHour) {
       if (minute >= maghribMinute) {
         const timeLeft = timeDifference(timeNow, isha);
-        resultant(maghribText, ishaText, timeLeft, lastUpdated);
+        return resultant(maghribText, ishaText, timeLeft, lastUpdated);
       } else {
         const timeLeft = timeDifference(timeNow, maghrib);
-        resultant(asrText, maghribText, timeLeft, lastUpdated);
+        return resultant(asrText, maghribText, timeLeft, lastUpdated);
       }
     } else {
       const timeLeft = timeDifference(timeNow, maghrib);
-      resultant(asrText, maghribText, timeLeft, lastUpdated);
+      return resultant(asrText, maghribText, timeLeft, lastUpdated);
     }
     // Isha timings start here
   } else if (hour < ishaZero) {
     if (hour == ishaHour) {
       if (minute >= ishaMinute) {
         const timeLeft = timeDifference(timeNow, midnight);
-        resultant(ishaText, midnightText, timeLeft, lastUpdated);
+        return resultant(ishaText, midnightText, timeLeft, lastUpdated);
       } else {
         const timeLeft = timeDifference(timeNow, isha);
-        resultant(maghribText, ishaText, timeLeft, lastUpdated);
+        return resultant(maghribText, ishaText, timeLeft, lastUpdated);
       }
     } else {
       const timeLeft = timeDifference(timeNow, isha);
-      resultant(maghribText, ishaText, timeLeft, lastUpdated);
+      return resultant(maghribText, ishaText, timeLeft, lastUpdated);
     }
     // Midnight timings start here
   } else if (hour < midnightZero) {
     if (hour == h) {
       if (minute >= m) {
         const timeLeft = timeDifference(timeNow, fajr2);
-        resultant(midnightText, fajrText, timeLeft, lastUpdated);
+        return resultant(midnightText, fajrText, timeLeft, lastUpdated);
       } else {
         const timeLeft = timeDifference(timeNow, midnight);
-        resultant(ishaText, midnightText, timeLeft, lastUpdated);
+        return resultant(ishaText, midnightText, timeLeft, lastUpdated);
       }
     } else {
       const timeLeft = timeDifference(timeNow, midnight);
-      resultant(ishaText, midnightText, timeLeft, lastUpdated);
+      return resultant(ishaText, midnightText, timeLeft, lastUpdated);
     }
   } else if (hour < 24) {
     const timeLeft = timeDifference(timeNow, fajr2);
-    resultant(midnightText, fajrText, timeLeft, lastUpdated);
+    return resultant(midnightText, fajrText, timeLeft, lastUpdated);
   } else {
     const timeLeft = timeDifference(timeNow, fajr);
-    resultant(midnightText, fajrText, timeLeft, lastUpdated);
+    return resultant(midnightText, fajrText, timeLeft, lastUpdated);
   }
 
   function timeDifference(start, end) {
@@ -247,7 +248,7 @@ function getSalahTimeCustom(
   }
 
   function resultant(prayer, nextPrayer, timeLeft, lastUpdated) {
-    resultantOutput = {
+    return {
       Current: prayer,
       Next: nextPrayer,
       Remaining: timeLeft,
@@ -262,13 +263,13 @@ function getSalahTimeCustom(
       },
     };
   }
-
-  return resultantOutput;
 }
 
-async function getSalahTime(city) {
+async function getSalahTimes(city) {
   if (!city) {
-    throw new Error("Missing city query.");
+    return {
+      Error: "Missing required inputs.",
+    };
   }
 
   const response = await fetch(`https://api.azwad.org/weather/${city}`, {
@@ -276,7 +277,9 @@ async function getSalahTime(city) {
   });
 
   if (!response.ok) {
-    throw new Error("Something went wrong.");
+    return {
+      Error: "Something went wrong.",
+    };
   }
 
   const data = await response.json();
@@ -289,12 +292,14 @@ async function getSalahTime(city) {
   );
 
   if (!response.ok) {
-    throw new Error("Something went wrong.");
+    return {
+      Error: "Something went wrong.",
+    };
   }
 
   const dataSecondary = await responseSecondary.json();
 
-  return getSalahTimeCustom(
+  return getSalahTimesCustom(
     `${dataSecondary.times.Fajr}`,
     `${dataSecondary.times.Sunrise}`,
     `${dataSecondary.times.Dhuhr}`,
@@ -305,25 +310,39 @@ async function getSalahTime(city) {
   );
 }
 
-function timeConvertTwelve(hour, minute, second) {
-  if (hour > 12) {
-    return `${hour - 12}:${minute}:${second} PM`;
-  } else {
-    return `${hour}:${minute}:${second} AM`;
+function getSalahTimesLocal(input) {
+  try {
+    if (
+      !input.Times.Fajr ||
+      !input.Times.Sunrise ||
+      !input.Times.Dhuhr ||
+      !input.Times.Asr ||
+      !input.Times.Maghrib ||
+      !input.Times.Isha
+    ) {
+      return { Error: "Incorrect input format." };
+    } else {
+      return getSalahTimesCustom(
+        `${input.Times.Fajr}`,
+        `${input.Times.Sunrise}`,
+        `${input.Times.Dhuhr}`,
+        `${input.Times.Asr}`,
+        `${input.Times.Maghrib}`,
+        `${input.Times.Isha}`,
+        `${input.Updated || "Unknown"}`
+      );
+    }
+  } catch {
+    return { Error: "Incorrect input format provided." };
   }
 }
 
-function timeConvertTwentyFour(hour, minute, second) {
-  if (hour > 12) {
-    return `${hour}:${minute}:${second}`;
-  } else {
-    return `${hour + 12}:${minute}:${second}`;
-  }
+function strftimeFormat(input) {
+  return strftime(`${input}`);
 }
 
 module.exports = {
-  getSalahTimeCustom,
-  getSalahTime,
-  timeConvertTwelve,
-  timeConvertTwentyFour,
+  getSalahTimesLocal,
+  getSalahTimes,
+  strftimeFormat,
 };
