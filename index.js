@@ -67,7 +67,12 @@ function getSalahTimesCustom(
     salahTimes.times.Sunrise[2] + salahTimes.times.Sunrise[3];
   const sunrise0 = parseInt(salahTimes.times.Sunrise[0]) + 1;
 
-  const dhuhrHour = salahTimes.times.Dhuhr[0] + salahTimes.times.Dhuhr[1];
+  let dhuhrHour;
+  if (salahTimes.times.Dhuhr[6] == "M") {
+    dhuhrHour = "0" + salahTimes.times.Dhuhr[0];
+  } else {
+    dhuhrHour = salahTimes.times.Dhuhr[0] + salahTimes.times.Dhuhr[1];
+  }
   const dhuhrMinute = salahTimes.times.Dhuhr[3] + salahTimes.times.Dhuhr[4];
   const dhuhrZero = parseInt(dhuhrHour) + 1;
 
@@ -337,12 +342,12 @@ function getSalahTimesLocal(input) {
   }
 }
 
-function strftimeFormat(input) {
-  return strftime(`${input}`);
+function getTimeNow(input) {
+  return strftime("%d/%m/%Y at %I:%M:%S");
 }
 
 module.exports = {
   getSalahTimesLocal,
   getSalahTimes,
-  strftimeFormat,
+  getTimeNow,
 };
